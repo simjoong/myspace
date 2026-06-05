@@ -19,13 +19,12 @@ const prompt = `오늘(${today}) 기준 PC 게임과 모바일 게임 시장의 
 
 const requestBody = JSON.stringify({
   contents: [{ parts: [{ text: prompt }] }],
-  tools: [{ google_search: {} }],
   generationConfig: { maxOutputTokens: 1500 }
 });
 
 const options = {
   hostname: 'generativelanguage.googleapis.com',
-  path: `/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+  path: `/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
