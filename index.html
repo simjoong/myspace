@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>my space</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0d0d0d;
+    --bg2: #181818;
+    --bg3: #222222;
+    --bg4: #2a2a2a;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.13);
+    --text1: #ede9e3;
+    --text2: #9e9b96;
+    --text3: #656260;
+    --accent: #c9ba9e;
+    --accent2: #8fa89e;
+    --gold: #c8a84b;
+    --gold2: rgba(200,168,75,0.13);
+    --green: #5a8f6e;
+    --red: #9f4a4a;
+    --blue: #4a7a9f;
+    --amber: #b88038;
+    --radius: 10px;
+    --radius-lg: 14px;
+    --font-body: 'Nunito', sans-serif;
+    --font-serif: 'Instrument Serif', serif;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text1);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── LAYOUT ── */
+  .sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    width: 200px;
+    height: 100vh;
+    background: var(--bg2);
+    border-right: 0.5px solid var(--border2);
+    padding: 1.8rem 1rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    z-index: 100;
+  }
+  .sidebar-logo {
+    font-family: var(--font-serif);
+    font-size: 22px;
+    color: var(--text1);
+    margin-bottom: 1.4rem;
+    padding-left: 8px;
+    letter-spacing: 0.02em;
+  }
+  .sidebar-logo span { color: var(--accent); font-style: italic; }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 10px;
+    border-radius: var(--radius);
+    color: var(--text3);
+    font-size: 13.5px;
+    cursor: pointer;
+    transition: all 0.15s;
+    border: none;
+    background: transparent;
+    width: 100%;
+    text-align: left;
+    font-family: var(--font-body);
+  }
+  .nav-item i { font-size: 17px; }
+  .nav-item:hover { background: var(--bg3); color: var(--text2); }
+  .nav-item.active { background: var(--bg3); color: var(--text1); }
+  .nav-item.active i { color: var(--accent); }
+  .sidebar-footer {
+    margin-top: auto;
+    padding: 10px;
+    font-size: 11px;
+    color: var(--text3);
+    font-family: monospace;
+    text-align: center;
+  }
+
+  .main {
+    margin-left: 200px;
+    padding: 2rem 2.4rem 4rem;
+    max-width: 820px;
+  }
+
+  /* ── PAGE HEADER ── */
+  .page-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 1.8rem;
+    padding-bottom: 1.1rem;
+    border-bottom: 0.5px solid var(--border2);
+  }
+  .page-title {
+    font-family: var(--font-serif);
+    font-size: 26px;
+    font-weight: 400;
+    color: var(--text1);
+  }
+  .page-date {
+    font-size: 12px;
+    color: var(--text3);
+    font-family: monospace;
+    margin-left: auto;
+  }
+
+  /* ── SECTIONS ── */
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--bg2);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.2rem 1.4rem;
+    margin-bottom: 1.1rem;
+  }
+  .card-title {
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.13em;
+    color: var(--text3);
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+
+  /* ── TODO ── */
+  .todo-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 0;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .todo-item:last-child { border-bottom: none; }
+  .todo-cb {
+    width: 17px; height: 17px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border2);
+    background: transparent;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.15s;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+  .todo-cb:checked { background: var(--green); border-color: var(--green); }
+  .todo-label { font-size: 14px; color: var(--text1); flex: 1; }
+  .todo-cb:checked ~ .todo-label { color: var(--text3); text-decoration: line-through; }
+  .todo-tag {
+    font-size: 10.5px;
+    padding: 2px 9px;
+    border-radius: 99px;
+    font-weight: 600;
+  }
+  .tag-work { background: rgba(74,122,159,0.18); color: #7aaecf; }
+  .tag-life { background: rgba(90,143,110,0.18); color: #7abf90; }
+  .tag-study { background: rgba(184,128,56,0.18); color: #d4a460; }
+  .add-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .add-inp {
+    flex: 1;
+    background: var(--bg3);
+    border: 0.5px solid var(--border2);
+    border-radius: var(--radius);
+    padding: 8px 13px;
+    color: var(--text1);
+    font-size: 13.5px;
+    font-family: var(--font-body);
+    outline: none;
+  }
+  .add-inp:focus { border-color: var(--accent); }
+  .add-inp::placeholder { color: var(--text3); }
+  .sel {
+    background: var(--bg3);
+    border: 0.5px solid var(--border2);
+    border-radius: var(--radius);
+    padding: 8px 10px;
+    color: var(--text2);
+    font-size: 13px;
+    font-family: var(--font-body);
+    outline: none;
+  }
+  .btn {
+    background: var(--bg3);
+    border: 0.5px solid var(--border2);
+    border-radius: var(--radius);
+    padding: 8px 16px;
+    color: var(--text2);
+    font-size: 13px;
+    cursor: pointer;
+    font-family: var(--font-body);
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .btn:hover { background: var(--accent); color: #0d0d0d; border-color: var(--accent); }
+  .btn:disabled { opacity: 0.45; pointer-events: none; }
+
+  .future-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .future-item:last-child { border-bottom: none; }
+  .future-num { font-size: 11px; color: var(--text3); font-family: monospace; min-width: 20px; margin-top: 2px; }
+  .future-text { font-size: 14px; color: var(--text2); flex: 1; line-height: 1.5; }
+  .future-rm {
+    background: transparent; border: none;
+    color: var(--text3); cursor: pointer;
+    font-size: 16px; padding: 0 3px; line-height: 1;
+    transition: color 0.12s; font-family: var(--font-body);
+  }
+  .future-rm:hover { color: var(--red); }
+
+  /* ── RESEARCH ── */
+  .scheduler-status-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--bg2);
+    border: 0.5px solid var(--border2);
+    border-radius: var(--radius-lg);
+    padding: 0.85rem 1.2rem;
+    margin-bottom: 1.1rem;
+  }
+  .sched-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 6px rgba(90,143,110,0.6);
+    flex-shrink: 0;
+  }
+  .sched-info { display: flex; flex-direction: column; gap: 1px; }
+  .sched-title { font-size: 12.5px; color: var(--text1); font-weight: 600; }
+  .sched-sub { font-size: 11px; color: var(--text3); }
+  .sched-updated {
+    margin-left: auto;
+    font-size: 11px;
+    color: var(--text3);
+    font-family: monospace;
+    white-space: nowrap;
+    text-align: right;
+  }
+  .sched-next { font-size: 10px; color: var(--text3); margin-top: 1px; }
+
+  .research-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+  .research-label { font-size: 11px; color: var(--text3); letter-spacing: 0.07em; }
+  .refresh-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--bg3);
+    border: 0.5px solid var(--border2);
+    border-radius: var(--radius);
+    padding: 6px 13px;
+    color: var(--text2);
+    font-size: 12.5px;
+    cursor: pointer;
+    font-family: var(--font-body);
+    transition: all 0.15s;
+  }
+  .refresh-btn:hover { background: var(--accent2); color: #0d0d0d; border-color: var(--accent2); }
+  .refresh-btn.loading { opacity: 0.5; pointer-events: none; }
+  .research-table { width: 100%; border-collapse: collapse; font-size: 13px; table-layout: fixed; }
+  .research-table th {
+    text-align: left;
+    padding: 8px 10px;
+    font-size: 10.5px;
+    color: var(--text3);
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    border-bottom: 0.5px solid var(--border2);
+  }
+  .research-table td {
+    padding: 10px 10px;
+    border-bottom: 0.5px solid var(--border);
+    color: var(--text2);
+    line-height: 1.5;
+    vertical-align: top;
+  }
+  .research-table tr:last-child td { border-bottom: none; }
+  .research-table td:first-child { color: var(--text1); font-size: 12.5px; }
+  .impact-badge {
+    display: inline-block;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 99px;
+    font-weight: 600;
+  }
+  .impact-high { background: rgba(159,74,74,0.22); color: #cf8a8a; }
+  .impact-mid { background: rgba(184,128,56,0.18); color: #d4a460; }
+  .impact-low { background: rgba(90,143,110,0.18); color: #7abf90; }
+  .loading-state {
+    text-align: center;
+    padding: 2.5rem 1rem;
+    color: var(--text3);
+    font-size: 13px;
+    line-height: 1.8;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spinner {
+    display: inline-block;
+    width: 20px; height: 20px;
+    border: 1.5px solid var(--border2);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 8px;
+  }
+  .spin-inline {
+    display: inline-block;
+    width: 16px; height: 16px;
+    border: 1.5px solid var(--border2);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    vertical-align: -3px;
+    margin-right: 5px;
+  }
+
+  /* ── ROUTINE ── */
+  .routine-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 1.1rem;
+  }
+  .stat-mini {
+    background: var(--bg3);
+    border-radius: var(--radius);
+    padding: 0.8rem 1rem;
+  }
+  .stat-mini-label { font-size: 11px; color: var(--text3); margin-bottom: 4px; }
+  .stat-mini-val { font-size: 22px; color: var(--text1); font-family: var(--font-serif); }
+  .journal-area {
+    width: 100%;
+    min-height: 150px;
+    background: var(--bg3);
+    border: 0.5px solid var(--border2);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    color: var(--text1);
+    font-size: 14px;
+    font-family: var(--font-body);
+    line-height: 1.75;
+    resize: vertical;
+    outline: none;
+  }
+  .journal-area:focus { border-color: var(--accent); }
+  .journal-area::placeholder { color: var(--text3); }
+  .save-btn {
+    margin-top: 10px;
+    background: transparent;
+    border: 0.5px solid var(--border2);
+    border-radius: var(--radius);
+    padding: 7px 18px;
+    color: var(--text2);
+    font-size: 12.5px;
+    cursor: pointer;
+    font-family: var(--font-body);
+    transition: all 0.15s;
+  }
+  .save-btn:hover { background: var(--bg4); color: var(--text1); }
+  .review-prompts {
+    font-size: 13.5px;
+    color: var(--text2);
+    line-height: 2;
+  }
+  .review-prompts span { color: var(--accent); font-style: italic; }
+
+  /* ── HOBBY ── */
+  .hobby-banner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 1.4rem;
+    padding-bottom: 1rem;
+    border-bottom: 0.5px solid var(--border2);
+  }
+  .hobby-banner i { font-size: 22px; color: var(--gold); }
+  .hobby-banner-title {
+    font-family: var(--font-serif);
+    font-size: 22px;
+    font-style: italic;
+    color: var(--text1);
+  }
+  .hobby-banner-count {
+    font-size: 11px;
+    color: var(--text3);
+    font-family: monospace;
+    margin-left: auto;
+  }
+  .search-row { display: flex; gap: 8px; margin-bottom: 1.3rem; }
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 10px;
+    margin-bottom: 1.3rem;
+  }
+  .result-card {
+    background: var(--bg2);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .result-card:hover { border-color: var(--border2); }
+  .result-card.selected { border-color: var(--gold); }
+  .poster {
+    width: 100%;
+    aspect-ratio: 2/3;
+    object-fit: cover;
+    background: var(--bg3);
+    display: block;
+  }
+  .poster-ph {
+    width: 100%;
+    aspect-ratio: 2/3;
+    background: var(--bg3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    color: var(--text3);
+  }
+  .result-info { padding: 8px 10px; }
+  .result-title {
+    font-size: 12px;
+    color: var(--text1);
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .result-year { font-size: 11px; color: var(--text3); margin-top: 2px; font-family: monospace; }
+
+  .add-panel {
+    background: var(--bg2);
+    border: 0.5px solid var(--border2);
+    border-radius: var(--radius-lg);
+    padding: 1.2rem 1.4rem;
+    margin-bottom: 1.3rem;
+  }
+  .add-inner { display: flex; gap: 1rem; align-items: flex-start; }
+  .sel-poster { width: 68px; flex-shrink: 0; border-radius: var(--radius); overflow: hidden; }
+  .sel-poster img { width: 100%; aspect-ratio: 2/3; object-fit: cover; display: block; }
+  .sel-poster-ph {
+    width: 68px; aspect-ratio: 2/3;
+    background: var(--bg3);
+    border-radius: var(--radius);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; color: var(--text3);
+  }
+  .add-fields { flex: 1; min-width: 0; }
+  .add-title { font-size: 15px; color: var(--text1); margin-bottom: 10px; line-height: 1.4; }
+  .star-row { display: flex; align-items: center; gap: 4px; margin-bottom: 10px; }
+  .star-lbl { font-size: 11px; color: var(--text3); margin-right: 4px; letter-spacing: 0.07em; font-weight: 600; }
+  .star {
+    font-size: 23px;
+    cursor: pointer;
+    color: var(--text3);
+    transition: color 0.1s;
+    line-height: 1;
+    background: none; border: none;
+    padding: 0 2px;
+    font-family: inherit;
+  }
+  .star.on { color: var(--gold); }
+  .star-val { font-size: 12px; color: var(--text3); margin-left: 4px; font-family: monospace; min-width: 24px; }
+  .panel-actions { display: flex; gap: 8px; margin-top: 10px; justify-content: flex-end; }
+  .btn-cancel {
+    background: transparent;
+    border: 0.5px solid var(--border2);
+    border-radius: var(--radius);
+    padding: 6px 14px;
+    color: var(--text2);
+    font-size: 12.5px;
+    cursor: pointer;
+    font-family: var(--font-body);
+    transition: all 0.15s;
+  }
+  .btn-cancel:hover { background: var(--bg4); }
+  .btn-save {
+    background: var(--gold2);
+    border: 0.5px solid var(--gold);
+    border-radius: var(--radius);
+    padding: 6px 18px;
+    color: var(--gold);
+    font-size: 12.5px;
+    cursor: pointer;
+    font-family: var(--font-body);
+    transition: all 0.15s;
+  }
+  .btn-save:hover { background: var(--gold); color: #0d0d0d; }
+
+  .col-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .col-label { font-size: 10.5px; color: var(--text3); letter-spacing: 0.09em; font-weight: 600; }
+  .filter-row { display: flex; gap: 5px; }
+  .filter-btn {
+    background: transparent;
+    border: 0.5px solid var(--border);
+    border-radius: 99px;
+    padding: 4px 12px;
+    color: var(--text3);
+    font-size: 11px;
+    cursor: pointer;
+    font-family: var(--font-body);
+    transition: all 0.15s;
+  }
+  .filter-btn:hover { color: var(--text2); }
+  .filter-btn.on { background: var(--bg3); color: var(--text1); border-color: var(--border2); }
+
+  .collection {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(125px, 1fr));
+    gap: 10px;
+  }
+  .col-card {
+    background: var(--bg2);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: border-color 0.15s;
+  }
+  .col-card:hover { border-color: var(--border2); }
+  .col-poster-wrap { position: relative; }
+  .col-poster { width: 100%; aspect-ratio: 2/3; object-fit: cover; display: block; background: var(--bg3); }
+  .col-poster-ph {
+    width: 100%; aspect-ratio: 2/3;
+    background: var(--bg3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px; color: var(--text3);
+  }
+  .col-type-badge {
+    position: absolute; top: 6px; left: 6px;
+    font-size: 10px; padding: 2px 7px;
+    border-radius: 99px;
+    background: rgba(0,0,0,0.72);
+    color: var(--text2);
+    border: 0.5px solid var(--border2);
+    font-weight: 600;
+  }
+  .col-del {
+    position: absolute; top: 6px; right: 6px;
+    background: rgba(0,0,0,0.72);
+    border: none; border-radius: 99px;
+    width: 22px; height: 22px;
+    color: var(--text3); cursor: pointer;
+    font-size: 15px; line-height: 1;
+    display: flex; align-items: center; justify-content: center;
+    transition: color 0.12s;
+  }
+  .col-del:hover { color: #cf8a8a; }
+  .col-info { padding: 8px 10px; }
+  .col-name {
+    font-size: 12px; color: var(--text1); line-height: 1.4;
+    display: -webkit-box; -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .col-stars { font-size: 13px; color: var(--gold); letter-spacing: 1px; margin-top: 3px; }
+  .col-comment {
+    font-size: 11px; color: var(--text3); margin-top: 4px; line-height: 1.4;
+    display: -webkit-box; -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .hobby-stats {
+    display: flex; gap: 8px; margin-bottom: 1.3rem;
+  }
+  .hstat {
+    background: var(--bg3); border-radius: var(--radius);
+    padding: 0.6rem 0.9rem; flex: 1; text-align: center;
+  }
+  .hstat-n { font-size: 20px; color: var(--text1); font-family: var(--font-serif); }
+  .hstat-l { font-size: 10px; color: var(--text3); margin-top: 2px; letter-spacing: 0.07em; font-weight: 600; }
+
+  /* ── MANUAL ── */
+  .manual-block { margin-bottom: 1.5rem; }
+  .manual-h {
+    font-size: 15px; color: var(--accent);
+    font-family: var(--font-serif); font-style: italic;
+    margin-bottom: 0.6rem;
+  }
+  .manual-body { font-size: 13.5px; color: var(--text2); line-height: 1.85; }
+  .manual-body code {
+    background: var(--bg3); padding: 1px 7px;
+    border-radius: 5px; font-family: monospace;
+    font-size: 12px; color: var(--accent2);
+  }
+  .manual-table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin-top: 10px; }
+  .manual-table th {
+    text-align: left; padding: 7px 10px; color: var(--text3);
+    border-bottom: 0.5px solid var(--border2); font-weight: 600;
+  }
+  .manual-table td { padding: 7px 10px; color: var(--text2); border-bottom: 0.5px solid var(--border); }
+  .manual-table tr:last-child td { border-bottom: none; }
+  .divider { height: 0.5px; background: var(--border); margin: 1.3rem 0; }
+  .empty { text-align: center; padding: 2.5rem 1rem; color: var(--text3); font-size: 13px; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 680px) {
+    .sidebar { width: 100%; height: auto; position: relative; flex-direction: row; flex-wrap: wrap; padding: 1rem; border-right: none; border-bottom: 0.5px solid var(--border2); }
+    .sidebar-logo { width: 100%; margin-bottom: 0.5rem; }
+    .sidebar-footer { display: none; }
+    .main { margin-left: 0; padding: 1.2rem 1rem 3rem; }
+    .scheduler-status-card { flex-wrap: wrap; gap: 8px; }
+    .sched-updated { margin-left: 0; text-align: left; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="sidebar">
+  <div class="sidebar-logo">my <span>space</span></div>
+  <button class="nav-item active" onclick="switchTab('todo', this)"><i class="ti ti-check"></i> todo</button>
+  <button class="nav-item" onclick="switchTab('research', this)"><i class="ti ti-chart-bar"></i> 시장 리서치</button>
+  <button class="nav-item" onclick="switchTab('routine', this)"><i class="ti ti-sun"></i> 하루 루틴</button>
+  <button class="nav-item" onclick="switchTab('hobby', this)"><i class="ti ti-movie"></i> hobby</button>
+  <button class="nav-item" onclick="switchTab('manual', this)"><i class="ti ti-book"></i> 매뉴얼</button>
+  <div class="sidebar-footer" id="sidebar-date"></div>
+</nav>
+
+<main class="main">
+
+  <!-- ── TODO ── -->
+  <div class="section active" id="sec-todo">
+    <div class="page-header">
+      <h1 class="page-title">todo</h1>
+      <span class="page-date" id="hdate"></span>
+    </div>
+
+    <div class="card">
+      <div class="card-title">오늘 할 일</div>
+      <div id="today-list">
+        <label class="todo-item"><input type="checkbox" class="todo-cb"><span class="todo-label">아침 루틴 체크</span><span class="todo-tag tag-life">life</span></label>
+        <label class="todo-item"><input type="checkbox" class="todo-cb"><span class="todo-label">시장 리서치 읽기</span><span class="todo-tag tag-work">work</span></label>
+        <label class="todo-item"><input type="checkbox" class="todo-cb"><span class="todo-label">하루 일기 쓰기</span><span class="todo-tag tag-life">life</span></label>
+      </div>
+      <div class="add-row">
+        <input class="add-inp" id="today-inp" placeholder="새 할 일 추가...">
+        <select class="sel" id="today-tag">
+          <option value="work">work</option>
+          <option value="life">life</option>
+          <option value="study">study</option>
+        </select>
+        <button class="btn" onclick="addToday()">+ 추가</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">앞으로 할 일</div>
+      <div id="future-list">
+        <div class="future-item"><span class="future-num">01</span><span class="future-text">개인 블로그 시작하기</span><button class="future-rm" onclick="removeFuture(this)">×</button></div>
+        <div class="future-item"><span class="future-num">02</span><span class="future-text">게임 시장 트렌드 리포트 정리</span><button class="future-rm" onclick="removeFuture(this)">×</button></div>
+        <div class="future-item"><span class="future-num">03</span><span class="future-text">주간 회고 습관 만들기</span><button class="future-rm" onclick="removeFuture(this)">×</button></div>
+      </div>
+      <div class="add-row">
+        <input class="add-inp" id="future-inp" placeholder="앞으로 하고 싶은 일...">
+        <button class="btn" onclick="addFuture()">+ 추가</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── RESEARCH ── -->
+  <div class="section" id="sec-research">
+    <div class="page-header">
+      <h1 class="page-title">시장 리서치</h1>
+      <span class="page-date" id="research-date-label"></span>
+    </div>
+
+    <!-- 스케줄러 상태 카드 -->
+    <div class="scheduler-status-card">
+      <div class="sched-dot" id="sched-dot"></div>
+      <div class="sched-info">
+        <span class="sched-title">자동 스케줄러</span>
+        <span class="sched-sub">매일 오전 9시 KST · GitHub Actions</span>
+      </div>
+      <div class="sched-updated">
+        <div id="research-last-updated">—</div>
+        <div class="sched-next" id="research-next-update"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="research-bar">
+        <span class="research-label">PC · 모바일 게임 시장 이슈</span>
+        <button class="refresh-btn" id="refresh-btn" onclick="loadResearch()">
+          <i class="ti ti-refresh"></i> 새로고침
+        </button>
+      </div>
+      <div id="research-content">
+        <div class="loading-state"><div class="spinner"></div><br>데이터를 불러오는 중...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── ROUTINE ── -->
+  <div class="section" id="sec-routine">
+    <div class="page-header">
+      <h1 class="page-title">하루 루틴</h1>
+      <span class="page-date" id="routine-date"></span>
+    </div>
+    <div class="routine-stats">
+      <div class="stat-mini"><div class="stat-mini-label">오늘 완료한 할 일</div><div class="stat-mini-val" id="done-count">0</div></div>
+      <div class="stat-mini"><div class="stat-mini-label">이번 주 일기 작성</div><div class="stat-mini-val" id="journal-count">0</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">오늘의 일기 · 자유 메모</div>
+      <textarea class="journal-area" id="journal-text" placeholder="오늘 있었던 일, 생각, 감정을 자유롭게 적어보세요..."></textarea>
+      <button class="save-btn" id="journal-save-btn" onclick="saveJournal()">저장</button>
+    </div>
+    <div class="card">
+      <div class="card-title">하루 마무리 정리</div>
+      <div class="review-prompts">
+        오늘 잘한 것 <span>→</span><br>
+        내일 집중할 것 <span>→</span><br>
+        오늘의 한 줄 <span>→</span>
+      </div>
+      <textarea class="journal-area" id="review-text" style="margin-top:12px;min-height:100px;" placeholder="하루를 돌아보며 간단히 적어보세요..."></textarea>
+      <button class="save-btn" id="review-save-btn" onclick="saveReview()">저장</button>
+    </div>
+  </div>
+
+  <!-- ── HOBBY ── -->
+  <div class="section" id="sec-hobby">
+    <div class="page-header">
+      <h1 class="page-title">hobby</h1>
+      <span class="page-date hobby-banner-count" id="hobby-count">0 works</span>
+    </div>
+
+    <div class="search-row">
+      <input class="add-inp" id="hobby-inp" placeholder="영화, 애니, 책 이름을 검색하세요...">
+      <select class="sel" id="hobby-type">
+        <option value="movie">영화</option>
+        <option value="tv">애니/드라마</option>
+        <option value="book">책</option>
+      </select>
+      <button class="btn" id="hobby-search-btn" onclick="doHobbySearch()">
+        <i class="ti ti-search"></i> 검색
+      </button>
+    </div>
+
+    <div id="hobby-results"></div>
+    <div id="hobby-add-panel"></div>
+
+    <div id="hobby-stats" style="display:none" class="hobby-stats">
+      <div class="hstat"><div class="hstat-n" id="hs-total">0</div><div class="hstat-l">total</div></div>
+      <div class="hstat"><div class="hstat-n" id="hs-movie">0</div><div class="hstat-l">영화</div></div>
+      <div class="hstat"><div class="hstat-n" id="hs-tv">0</div><div class="hstat-l">애니/드라마</div></div>
+      <div class="hstat"><div class="hstat-n" id="hs-book">0</div><div class="hstat-l">책</div></div>
+      <div class="hstat"><div class="hstat-n" id="hs-avg">—</div><div class="hstat-l">평균 별점</div></div>
+    </div>
+
+    <div class="col-header">
+      <span class="col-label">my collection</span>
+      <div class="filter-row">
+        <button class="filter-btn on" onclick="setFilter('all',this)">전체</button>
+        <button class="filter-btn" onclick="setFilter('movie',this)">영화</button>
+        <button class="filter-btn" onclick="setFilter('tv',this)">애니/드라마</button>
+        <button class="filter-btn" onclick="setFilter('book',this)">책</button>
+      </div>
+    </div>
+    <div class="collection" id="collection"></div>
+  </div>
+
+  <!-- ── MANUAL ── -->
+  <div class="section" id="sec-manual">
+    <div class="page-header">
+      <h1 class="page-title">매뉴얼</h1>
+    </div>
+    <div class="card">
+      <div class="manual-block">
+        <div class="manual-h">이 페이지의 구조</div>
+        <div class="manual-body">총 5개 섹션으로 구성되어 있습니다. 왼쪽 사이드바로 이동하며, 데이터는 페이지를 닫기 전까지 유지됩니다.</div>
+        <table class="manual-table">
+          <tr><th>섹션</th><th>역할</th><th>수정 방법</th></tr>
+          <tr><td>todo</td><td>오늘 / 미래 할 일</td><td>입력창에서 직접 추가, × 버튼으로 삭제</td></tr>
+          <tr><td>시장 리서치</td><td>AI 게임 시장 자동 요약</td><td>GitHub Actions 자동 업데이트 (매일 09시)</td></tr>
+          <tr><td>하루 루틴</td><td>자유 일기 + 마무리 정리</td><td>텍스트 입력 후 저장</td></tr>
+          <tr><td>hobby</td><td>영화·애니·책 트래커</td><td>검색 후 별점/한줄평 입력</td></tr>
+          <tr><td>매뉴얼</td><td>이 페이지 설명서</td><td>HTML 코드 직접 수정</td></tr>
+        </table>
+      </div>
+      <div class="divider"></div>
+      <div class="manual-block">
+        <div class="manual-h">GitHub Pages 배포 방법</div>
+        <div class="manual-body">
+          1. <a href="https://github.com/new" target="_blank" style="color:var(--accent2)">github.com/new</a>에서 새 저장소를 만드세요 (예: <code>my-space</code>)<br>
+          2. 이 폴더의 모든 파일을 <code>main</code> 브랜치에 push<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<code>git init &amp;&amp; git add . &amp;&amp; git commit -m "init" &amp;&amp; git push</code><br>
+          3. Settings → Pages → Source: <code>main</code> 브랜치, <code>/ (root)</code> 선택 후 Save<br>
+          4. <code>https://[사용자명].github.io/[저장소명]</code>으로 접속 가능
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="manual-block">
+        <div class="manual-h">시장 리서치 자동화 설정</div>
+        <div class="manual-body">
+          1. Anthropic API 키 발급: <a href="https://console.anthropic.com" target="_blank" style="color:var(--accent2)">console.anthropic.com</a><br>
+          2. GitHub 저장소 → Settings → Secrets and variables → Actions<br>
+          3. <code>New repository secret</code> 클릭<br>
+          4. Name: <code>ANTHROPIC_API_KEY</code>, Value: 발급받은 키 입력 후 저장<br>
+          5. Actions 탭 → <code>Market Research Auto-Update</code> 워크플로우 활성화<br><br>
+          설정 완료 후 매일 오전 9시(KST)에 자동으로 <code>market-research.json</code>이<br>
+          업데이트되고, 페이지를 열면 최신 데이터가 표시됩니다.<br><br>
+          수동 실행: Actions → Market Research Auto-Update → Run workflow
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="manual-block">
+        <div class="manual-h">자주 쓰는 수정 방법</div>
+        <div class="manual-body">
+          태그 색상 변경 → CSS에서 <code>.tag-work</code> / <code>.tag-life</code> / <code>.tag-study</code> 수정<br>
+          사이드바 이름 변경 → <code>sidebar-logo</code> 안의 텍스트 수정<br>
+          배경색 변경 → <code>:root</code> 의 <code>--bg</code> 값 수정<br>
+          스케줄 변경 → <code>.github/workflows/market-research.yml</code>의 <code>cron</code> 값 수정
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+const now = new Date();
+const days = ['일','월','화','수','목','금','토'];
+const dateStr = `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')} (${days[now.getDay()]})`;
+document.getElementById('hdate').textContent = dateStr;
+document.getElementById('sidebar-date').textContent = dateStr;
+document.getElementById('research-date-label').textContent = `${now.getMonth()+1}월 ${now.getDate()}일`;
+document.getElementById('routine-date').textContent = dateStr;
+
+function switchTab(t, el) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('sec-'+t).classList.add('active');
+  el.classList.add('active');
+  if (t === 'routine') updateRoutineStats();
+}
+
+/* ── TODO ── */
+function addToday() {
+  const inp = document.getElementById('today-inp');
+  const tag = document.getElementById('today-tag').value;
+  const v = inp.value.trim();
+  if (!v) return;
+  const lbl = document.createElement('label');
+  lbl.className = 'todo-item';
+  lbl.innerHTML = `<input type="checkbox" class="todo-cb"><span class="todo-label">${v}</span><span class="todo-tag tag-${tag}">${tag}</span>`;
+  document.getElementById('today-list').appendChild(lbl);
+  inp.value = '';
+}
+document.getElementById('today-inp').addEventListener('keydown', e => { if (e.key === 'Enter') addToday(); });
+
+let futCount = 3;
+function addFuture() {
+  const inp = document.getElementById('future-inp');
+  const v = inp.value.trim();
+  if (!v) return;
+  futCount++;
+  const d = document.createElement('div');
+  d.className = 'future-item';
+  d.innerHTML = `<span class="future-num">${String(futCount).padStart(2,'0')}</span><span class="future-text">${v}</span><button class="future-rm" onclick="removeFuture(this)">×</button>`;
+  document.getElementById('future-list').appendChild(d);
+  inp.value = '';
+  reindexFuture();
+}
+document.getElementById('future-inp').addEventListener('keydown', e => { if (e.key === 'Enter') addFuture(); });
+
+function removeFuture(btn) {
+  btn.closest('.future-item').remove();
+  reindexFuture();
+}
+function reindexFuture() {
+  document.querySelectorAll('#future-list .future-item').forEach((el, i) => {
+    el.querySelector('.future-num').textContent = String(i+1).padStart(2,'0');
+  });
+  futCount = document.querySelectorAll('#future-list .future-item').length;
+}
+
+/* ── RESEARCH ── */
+function fmtKST(isoStr) {
+  if (!isoStr) return null;
+  const d = new Date(isoStr);
+  return d.toLocaleString('ko-KR', {
+    timeZone: 'Asia/Seoul',
+    month: 'numeric', day: 'numeric',
+    hour: '2-digit', minute: '2-digit'
+  });
+}
+
+function calcNextRun() {
+  const kst = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Seoul' }));
+  const next = new Date(kst);
+  next.setHours(9, 0, 0, 0);
+  if (kst >= next) next.setDate(next.getDate() + 1);
+  return next.toLocaleString('ko-KR', {
+    timeZone: 'Asia/Seoul',
+    month: 'numeric', day: 'numeric',
+    hour: '2-digit', minute: '2-digit'
+  });
+}
+
+function updateSchedUI(updatedAt, hasData) {
+  const lastEl = document.getElementById('research-last-updated');
+  const nextEl = document.getElementById('research-next-update');
+  const dot = document.getElementById('sched-dot');
+
+  if (updatedAt) {
+    const fmt = fmtKST(updatedAt);
+    if (lastEl) lastEl.textContent = `마지막: ${fmt}`;
+    dot.style.background = 'var(--green)';
+    dot.style.boxShadow = '0 0 6px rgba(90,143,110,0.6)';
+  } else {
+    if (lastEl) lastEl.textContent = '업데이트 대기 중';
+    dot.style.background = 'var(--amber)';
+    dot.style.boxShadow = '0 0 6px rgba(184,128,56,0.5)';
+  }
+  if (nextEl) nextEl.textContent = `다음: ${calcNextRun()}`;
+}
+
+async function loadResearchFromFile() {
+  const content = document.getElementById('research-content');
+  try {
+    const res = await fetch('./market-research.json?_=' + Date.now());
+    if (!res.ok) throw new Error('not found');
+    const data = await res.json();
+
+    updateSchedUI(data.updatedAt, !!(data.issues && data.issues.length));
+
+    if (!data.issues || !data.issues.length) {
+      content.innerHTML = `<div class="loading-state">
+        GitHub Actions 설정 후 매일 오전 9시에 자동 업데이트됩니다.<br>
+        <span style="font-size:11px;color:var(--text3);display:block;margin-top:8px">
+          매뉴얼 → 시장 리서치 자동화 설정 참고
+        </span>
+      </div>`;
+      return;
+    }
+
+    const impactMap = { '높음': 'impact-high', '중간': 'impact-mid', '낮음': 'impact-low' };
+    content.innerHTML = `<table class="research-table">
+      <thead><tr>
+        <th style="width:22%">이슈</th>
+        <th style="width:12%">플랫폼</th>
+        <th>요약</th>
+        <th style="width:10%">영향도</th>
+      </tr></thead>
+      <tbody>${data.issues.map(i => `
+        <tr>
+          <td>${i.name}</td>
+          <td style="white-space:nowrap">${i.platform}</td>
+          <td>${i.summary}</td>
+          <td><span class="impact-badge ${impactMap[i.impact] || 'impact-mid'}">${i.impact}</span></td>
+        </tr>`).join('')}
+      </tbody>
+    </table>`;
+  } catch(e) {
+    updateSchedUI(null, false);
+    content.innerHTML = `<div class="loading-state">
+      데이터를 불러올 수 없습니다.<br>
+      <span style="font-size:11px;color:var(--text3);display:block;margin-top:8px">
+        GitHub Pages 환경에서 실행하거나 Actions를 먼저 실행해주세요
+      </span>
+    </div>`;
+  }
+}
+
+async function loadResearch() {
+  const btn = document.getElementById('refresh-btn');
+  const content = document.getElementById('research-content');
+  btn.classList.add('loading');
+  btn.innerHTML = '<span class="spin-inline"></span>로딩 중...';
+  content.innerHTML = '<div class="loading-state"><div class="spinner"></div><br>데이터를 불러오는 중...</div>';
+  await loadResearchFromFile();
+  btn.classList.remove('loading');
+  btn.innerHTML = '<i class="ti ti-refresh"></i> 새로고침';
+}
+
+/* ── ROUTINE ── */
+let journalSaved = false;
+function saveJournal() {
+  const t = document.getElementById('journal-text').value.trim();
+  if (!t) return;
+  journalSaved = true;
+  const btn = document.getElementById('journal-save-btn');
+  btn.textContent = '저장됨 ✓'; btn.style.color = 'var(--green)';
+  setTimeout(() => { btn.textContent = '저장'; btn.style.color = ''; }, 2000);
+  updateRoutineStats();
+}
+function saveReview() {
+  const t = document.getElementById('review-text').value.trim();
+  if (!t) return;
+  const btn = document.getElementById('review-save-btn');
+  btn.textContent = '저장됨 ✓'; btn.style.color = 'var(--green)';
+  setTimeout(() => { btn.textContent = '저장'; btn.style.color = ''; }, 2000);
+}
+function updateRoutineStats() {
+  document.getElementById('done-count').textContent = document.querySelectorAll('#today-list .todo-cb:checked').length;
+  document.getElementById('journal-count').textContent = journalSaved ? 1 : 0;
+}
+
+/* ── HOBBY ── */
+let hobbyCollection = [];
+let hobbyResults = [];
+let hobbySelected = null;
+let hobbyRating = 0;
+let hobbyFilter = 'all';
+const typeLabel = { movie:'영화', tv:'애니/드라마', book:'책' };
+const typeIcon = { movie:'🎬', tv:'🎞️', book:'📖' };
+
+async function doHobbySearch() {
+  const q = document.getElementById('hobby-inp').value.trim();
+  const t = document.getElementById('hobby-type').value;
+  if (!q) return;
+  const btn = document.getElementById('hobby-search-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin-inline"></span>검색 중';
+  document.getElementById('hobby-results').innerHTML = '<div class="loading-state"><span class="spin-inline"></span>AI가 검색 중입니다...</div>';
+  document.getElementById('hobby-add-panel').innerHTML = '';
+  hobbySelected = null;
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': localStorage.getItem('anthropic_api_key') || '',
+        'anthropic-version': '2023-06-01'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: `"${q}"로 ${typeLabel[t]} 검색 결과 4개를 JSON만 반환해. 다른 텍스트 없이. 형식: {"results":[{"title":"제목","year":"연도(없으면 -)","poster":"공개 포스터 이미지 URL(없으면 null)","genre":"장르 1~2개","type":"${t}"}]}` }]
+      })
+    });
+    const data = await res.json();
+    const text = data.content.filter(b => b.type === 'text').map(b => b.text).join('');
+    hobbyResults = JSON.parse(text.replace(/```json|```/g,'').trim()).results;
+    renderHobbyResults();
+  } catch(e) {
+    document.getElementById('hobby-results').innerHTML = '<div class="loading-state" style="color:#cf8a8a">검색에 실패했습니다.<br><span style="font-size:11px">API 키가 필요합니다. 브라우저 콘솔에서<br><code>localStorage.setItem("anthropic_api_key","sk-...")</code> 입력 후 재시도</span></div>';
+  }
+  btn.disabled = false;
+  btn.innerHTML = '<i class="ti ti-search"></i> 검색';
+}
+
+function renderHobbyResults() {
+  if (!hobbyResults.length) { document.getElementById('hobby-results').innerHTML = '<div class="empty">검색 결과가 없습니다.</div>'; return; }
+  document.getElementById('hobby-results').innerHTML = `<div class="results-grid">${hobbyResults.map((r,i)=>`
+    <div class="result-card" id="hrc-${i}" onclick="selectHobby(${i})">
+      ${r.poster ? `<img class="poster" src="${r.poster}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" loading="lazy"><div class="poster-ph" style="display:none">${typeIcon[r.type]||'🎬'}</div>` : `<div class="poster-ph">${typeIcon[r.type]||'🎬'}</div>`}
+      <div class="result-info"><div class="result-title">${r.title}</div><div class="result-year">${r.year}</div></div>
+    </div>`).join('')}</div>`;
+}
+
+function selectHobby(i) {
+  document.querySelectorAll('.result-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('hrc-'+i).classList.add('selected');
+  hobbySelected = hobbyResults[i];
+  hobbyRating = 0;
+  const r = hobbySelected;
+  document.getElementById('hobby-add-panel').innerHTML = `
+    <div class="add-panel">
+      <div class="add-inner">
+        <div class="sel-poster">
+          ${r.poster ? `<img src="${r.poster}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" style="width:100%;aspect-ratio:2/3;object-fit:cover;border-radius:var(--radius);display:block"><div class="sel-poster-ph" style="display:none">${typeIcon[r.type]||'🎬'}</div>` : `<div class="sel-poster-ph">${typeIcon[r.type]||'🎬'}</div>`}
+        </div>
+        <div class="add-fields">
+          <div class="add-title">${r.title} <span style="font-size:12px;color:var(--text3)">(${r.year})</span></div>
+          <div class="star-row">
+            <span class="star-lbl">별점</span>
+            ${[1,2,3,4,5].map(n=>`<button class="star" id="hstar-${n}" onclick="setHobbyRating(${n})">★</button>`).join('')}
+            <span class="star-val" id="hstar-val">—</span>
+          </div>
+          <textarea class="journal-area" id="hobby-comment" rows="2" style="min-height:60px" placeholder="한줄평을 남겨보세요..."></textarea>
+          <div class="panel-actions">
+            <button class="btn-cancel" onclick="cancelHobby()">취소</button>
+            <button class="btn-save" onclick="saveHobbyItem()">컬렉션에 추가</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function setHobbyRating(n) {
+  hobbyRating = n;
+  for (let i=1;i<=5;i++) {
+    const s = document.getElementById('hstar-'+i);
+    if(s) s.className = 'star' + (i<=n?' on':'');
+  }
+  const sv = document.getElementById('hstar-val');
+  if(sv) sv.textContent = n+'.0';
+}
+
+function cancelHobby() {
+  document.getElementById('hobby-add-panel').innerHTML = '';
+  document.querySelectorAll('.result-card').forEach(c => c.classList.remove('selected'));
+  hobbySelected = null;
+}
+
+function saveHobbyItem() {
+  if (!hobbySelected) return;
+  const comment = document.getElementById('hobby-comment').value.trim();
+  hobbyCollection.unshift({ ...hobbySelected, rating: hobbyRating, comment, id: Date.now() });
+  cancelHobby();
+  document.getElementById('hobby-results').innerHTML = '';
+  hobbyResults = [];
+  document.getElementById('hobby-inp').value = '';
+  renderCollection();
+  updateHobbyStats();
+}
+
+function renderCollection() {
+  const filtered = hobbyFilter === 'all' ? hobbyCollection : hobbyCollection.filter(c => c.type === hobbyFilter);
+  const cnt = hobbyCollection.length;
+  document.getElementById('hobby-count').textContent = cnt + ' work' + (cnt !== 1 ? 's' : '');
+  if (!filtered.length) {
+    document.getElementById('collection').innerHTML = '<div class="empty" style="grid-column:1/-1">아직 추가된 작품이 없어요.</div>';
+    return;
+  }
+  document.getElementById('collection').innerHTML = filtered.map(item => `
+    <div class="col-card">
+      <div class="col-poster-wrap">
+        ${item.poster ? `<img class="col-poster" src="${item.poster}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" loading="lazy"><div class="col-poster-ph" style="display:none">${typeIcon[item.type]||'🎬'}</div>` : `<div class="col-poster-ph">${typeIcon[item.type]||'🎬'}</div>`}
+        <span class="col-type-badge">${typeLabel[item.type]}</span>
+        <button class="col-del" onclick="deleteHobby(${item.id})" aria-label="삭제">×</button>
+      </div>
+      <div class="col-info">
+        <div class="col-name">${item.title}</div>
+        <div class="col-stars">${item.rating ? '★'.repeat(item.rating)+'☆'.repeat(5-item.rating) : '☆☆☆☆☆'}</div>
+        ${item.comment ? `<div class="col-comment">${item.comment}</div>` : ''}
+      </div>
+    </div>`).join('');
+}
+
+function deleteHobby(id) {
+  hobbyCollection = hobbyCollection.filter(c => c.id !== id);
+  renderCollection();
+  updateHobbyStats();
+}
+
+function setFilter(f, btn) {
+  hobbyFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  renderCollection();
+}
+
+function updateHobbyStats() {
+  const n = hobbyCollection.length;
+  document.getElementById('hobby-stats').style.display = n ? 'flex' : 'none';
+  document.getElementById('hs-total').textContent = n;
+  document.getElementById('hs-movie').textContent = hobbyCollection.filter(c=>c.type==='movie').length;
+  document.getElementById('hs-tv').textContent = hobbyCollection.filter(c=>c.type==='tv').length;
+  document.getElementById('hs-book').textContent = hobbyCollection.filter(c=>c.type==='book').length;
+  const rated = hobbyCollection.filter(c=>c.rating>0);
+  document.getElementById('hs-avg').textContent = rated.length ? (rated.reduce((a,c)=>a+c.rating,0)/rated.length).toFixed(1) : '—';
+}
+
+document.getElementById('hobby-inp').addEventListener('keydown', e => { if (e.key === 'Enter') doHobbySearch(); });
+renderCollection();
+
+/* ── INIT ── */
+loadResearchFromFile();
+</script>
+</body>
+</html>
