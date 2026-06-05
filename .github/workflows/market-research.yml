@@ -1,0 +1,45 @@
+name: Market Research Auto-Update
+
+on:
+  schedule:
+    # 매일 00:00 UTC = 오전 9시 KST
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+    inputs:
+      debug:
+        description: 'Show raw API response'
+        required: false
+        default: 'false'
+
+jobs:
+  update-research:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Fetch market research from Claude API
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          DEBUG: ${{ github.event.inputs.debug }}
+        run: node scripts/fetch-research.js
+
+      - name: Commit and push updated data
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add market-research.json
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore: auto update market research $(date -u +'%Y-%m-%d %H:%M UTC')"
+            git push
+          fi
