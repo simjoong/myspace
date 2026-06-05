@@ -26,9 +26,9 @@ jobs:
         with:
           node-version: '24'
 
-      - name: Fetch market research from Claude API
+      - name: Fetch market research from Gemini API
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           DEBUG: ${{ github.event.inputs.debug }}
         run: node scripts/fetch-research.js
 
